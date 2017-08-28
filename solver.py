@@ -190,3 +190,114 @@ class Bomb():
                     "Does the bomb have a parallel port?", bool)
 
         return self._has_parallel_port
+
+
+def solve_simple_wires(bomb):
+    Color.print_color_reminder()
+
+    colorlist_type = default_ranged_colorlist(3, 6)
+    wires = ask_question("From top to bottom, which wires are there?", colorlist_type)
+
+    wire = "?????"
+    if len(wires) == 3:
+        if "R" not in wires:
+            wire = "second"
+        elif wires[-1] == "W":
+            wire = "last"
+        elif wires.count("U") > 1:
+            wire = "last blue"
+        else:
+            wire = "last"
+    elif len(wires) == 4:
+        if wires.count("R") > 1 and bomb.odd_serial_number:
+            wire = "last red"
+        elif wires[-1] == "Y" and "R" not in wires:
+            wire = "first"
+        elif wires.count("U") == 1:
+            wire = "first"
+        elif wires.count("Y") > 1:
+            wire = "last"
+        else:
+            wire = "second"
+    elif len(wires) == 5:
+        if wires[-1] == "B" and bomb.odd_serial_number:
+            wire = "fourth"
+        elif wires.count("R") and wires.count("Y") > 1:
+            wire = "first"
+        elif "B" not in wires:
+            wire = "second"
+        else:
+            wire = "first"
+    elif len(wires) == 6:
+        if "Y" not in wires and bomb.odd_serial_number:
+            wire = "third"
+        elif wires.count("Y") == 1 and wires.count("W") > 1:
+            wire = "fourth"
+        elif "R" not in wires:
+            wire = "last"
+        else:
+            wire = "fourth"
+    else:
+        print("Theres a bug in the simple wires solver")
+        print("Don't know what to do")
+
+    print("Cut the {} wire".format(wire))
+    print()
+    input("Press enter to continue...")
+
+
+module_solvers = collections.OrderedDict()
+module_solvers["Simple Wires"] = solve_simple_wires
+
+
+def solve_bomb():
+    module_names = list(module_solvers.keys())
+
+    print("<ctrl>+c to finish the bomb")
+
+    bomb = Bomb()
+
+    while True:
+        print("--------------------------------------------------")
+        print()
+        for i, name in enumerate(module_names):
+            print("{}. {}".format(i, name))
+
+        sel_num = ask_question("Which module are we defusing now?", int)
+        if sel_num >= 0 and sel_num < len(module_names):
+            try:
+                selection = module_names[sel_num]
+            except KeyboardInterrupt:
+                break
+
+            try:
+                module_solvers[selection](bomb)
+            except KeyboardInterrupt:
+                print()
+                continue
+
+
+def print_header():
+    print()
+    print("      ====================================")
+    print("      #    Joe's amazing KTANE expert    #")
+    print("      #                                  #")
+    print("      #     Manual verification code:    #")
+    print("      #               241                #")
+    print("      ====================================")
+    print()
+
+def main():
+    print_header()
+
+    try:
+        solve_bomb()
+    except KeyboardInterrupt:
+        print()
+        print("Well done (presumably)")
+        print("Exiting...")
+
+    print_header()
+
+if __name__ == "__main__":
+    main()
