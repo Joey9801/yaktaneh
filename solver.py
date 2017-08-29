@@ -23,10 +23,22 @@ def ask_question(question, expected_type):
         except (TypeError, ValueError):
             print("Couldn't parse input, try again")
 
-    print("Answered: {}".format(result))
-    print()
+    if expected_type not in (int, str):
+        print("Answered: {}".format(result))
 
+    print()
     return result
+
+
+def give_instruction(instruction):
+    cap = '=' * len(instruction)
+
+    print("    =={}==".format(cap))
+    print("    # {} #".format(instruction))
+    print("    =={}==".format(cap))
+
+    print()
+    input("Press enter to continue...")
 
 
 class Color():
@@ -241,16 +253,14 @@ def solve_simple_wires(bomb):
         print("Theres a bug in the simple wires solver")
         print("Don't know what to do")
 
-    print("Cut the {} wire".format(wire))
-    print()
-    input("Press enter to continue...")
+    give_instruction("Cut the {} wire".format(wire))
 
 
 def solve_button(bomb):
     Color.print_color_reminder()
 
     def solve_releasing_held_button():
-        print("Press and hold the button")
+        give_instruction("Press and hold the button")
 
         color = ask_question("What color is the lit strip?", Color)
 
@@ -263,10 +273,11 @@ def solve_button(bomb):
             "W": 1,
         }[color.color_code]
 
-        print("Release the buton when there is a {} in any position".format(time_requirement))
+        give_instruction(
+                "Release the buton when there is a {} in any position".format(time_requirement))
 
     def immediately_release():
-        print("Press and immediately release the button")
+        give_instruction("Press and immediately release the button")
 
     color = ask_question("What color is the button?", Color)
 
@@ -346,7 +357,7 @@ def solve_memory(bomb):
 
     def literal_label(label):
         def f():
-            print("Press the button with label \"{}\"".format(label))
+            give_instruction("Press the button with label \"{}\"".format(label))
 
             pos = ask_question("What was the position of that button?", int)
             stage_record.append(Stage(label=label, position=pos))
@@ -362,7 +373,7 @@ def solve_memory(bomb):
                 "fourth"
             ]
 
-            print("Press the button in the {} position".format(
+            give_instruction("Press the button in the {} position".format(
                 position_words[pos - 1]))
 
             label = ask_question("What was the label of that button?", int)
@@ -432,14 +443,10 @@ def solve_memory(bomb):
 
 def solve_complicated_wires(bomb):
     def cut():
-        print("   ================")
-        print("   # Cut the wire #")
-        print("   ================")
+        give_instruction("Cut the wire")
 
     def no_cut():
-        print("   =======================")
-        print("   # Do not cut the wire #")
-        print("   =======================")
+        give_instruction("Do not cut the wire")
 
     def cut_if(condition):
         if condition:
@@ -484,8 +491,6 @@ def solve_complicated_wires(bomb):
 
         wire = Wire(red=red, blue=blue, star=star, led=led)
         cases[wire]()
-
-        input()
 
 
 module_solvers = collections.OrderedDict()
