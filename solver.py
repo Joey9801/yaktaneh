@@ -515,17 +515,13 @@ def solve_bomb():
             print("{}. {}".format(i, name))
 
         sel_num = ask_question("Which module are we defusing now?", int)
-        if sel_num >= 0 and sel_num < len(module_names):
-            try:
-                selection = module_names[sel_num]
-            except KeyboardInterrupt:
-                break
+        selection = module_names[sel_num]
 
-            try:
-                module_solvers[selection](bomb)
-            except KeyboardInterrupt:
-                print()
-                continue
+        try:
+            module_solvers[selection](bomb)
+        except KeyboardInterrupt:
+            print()
+            continue
 
 
 def print_header():
