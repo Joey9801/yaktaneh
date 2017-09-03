@@ -1,3 +1,6 @@
+from interface import ask_question
+
+
 class Indicators():
     def __init__(self):
         self._known_indicators = dict()

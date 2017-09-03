@@ -23,7 +23,7 @@ class Symbol():
     char_aspect = 7 / 4
 
     def __init__(self, filename, name, print_size=32):
-        self.filename = os.path.join("symbols/", filename)
+        self.filename = os.path.join("modules/symbols/", filename)
         self.name = name
         self._print_size = print_size
 
