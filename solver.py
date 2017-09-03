@@ -21,7 +21,7 @@ def ask_question(question, expected_type):
             else:
                 result = expected_type(raw_result)
         except (TypeError, ValueError):
-            print("Couldn't parse input, try again")
+            print("Try again")
 
     if expected_type not in (int, str):
         print("Answered: {}".format(result))
@@ -30,16 +30,19 @@ def ask_question(question, expected_type):
     return result
 
 
+def give_instructions(instructions):
+    max_len = max(map(len, instructions))
+    cap = '=' * max_len
+
+    print("    =={}==".format(cap))
+
+    for line in instructions:
+        print("    # {line:{width}} #".format(line=line, width=max_len))
+
+    print("    =={}==".format(cap))
+
 def give_instruction(instruction):
-    cap = '=' * len(instruction)
-
-    print("    =={}==".format(cap))
-    print("    # {} #".format(instruction))
-    print("    =={}==".format(cap))
-
-    print()
-    input("Press enter to continue...")
-
+    give_instructions([instruction])
 
 class Color():
     color_codes = collections.OrderedDict()
