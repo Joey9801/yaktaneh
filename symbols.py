@@ -180,3 +180,108 @@ class SymbolList():
                 return sym
 
         return None
+
+class SymbolSet():
+    def __init__(self, symbol_names):
+        self.symbols = list(map(SymbolList.get_symbol, symbol_names))
+
+    def matches(self, test_symbols):
+        for sym in test_symbols:
+            if sym not in self.symbols:
+                return False
+
+        return True
+
+    def solve_order(self, test_symbols):
+        if not self.matches(test_symbols):
+            print("This symbol set doesn't have all the requisite symbols...")
+            return
+
+        instructions = ["Press the symbols in the following order:"]
+        i = 1
+        for sym in self.symbols:
+            if sym in test_symbols:
+                instructions.append("   {}. {}".format(i, sym.name))
+                i += 1
+
+        give_instructions(instructions)
+
+symbol_sets = [
+    SymbolSet([
+        "Balloon",
+        "AT",
+        "Upside-down Y",
+        "Squiggly N",
+        "Squidknife",
+        "Hook N",
+        "Left C"
+    ]),
+    SymbolSet([
+        "Euro",
+        "Balloon",
+        "Left C",
+        "Cursive",
+        "Hollow Star",
+        "Hook N",
+        "Question Mark"
+    ]),
+    SymbolSet([
+        "Copyright",
+        "Pumpkin",
+        "Cursive",
+        "Double K",
+        "Melted 3",
+        "Upside-down Y",
+        "Hollow Star"
+    ]),
+    SymbolSet([
+        "Six",
+        "Paragraph",
+        "bT",
+        "Squidknife",
+        "Double K",
+        "Question Mark",
+        "Smiley Face"
+    ]),
+    SymbolSet([
+        "Pitchfork",
+        "Smiley Face",
+        "bT",
+        "Right C",
+        "Paragraph",
+        "Dragon",
+        "Filled Star"
+    ]),
+    SymbolSet([
+        "Six",
+        "Euro",
+        "Tracks",
+        "ae",
+        "Pitchfork",
+        "N with hat",
+        "Omega"
+    ])
+]
+
+def solve_symbols(bomb):
+    given_symbols = set()
+    while len(given_symbols) < 4:
+        SymbolList.print_symbol_options()
+        new_symbol = ask_question("Name another symbol", SymbolList.ask_symbol)
+
+        if new_symbol in given_symbols:
+            print()
+            print("Error: You had already entered {}".format(new_symbol.name))
+            input()
+        else:
+            given_symbols.add(new_symbol)
+
+    for sym_set in symbol_sets:
+        if sym_set.matches(given_symbols):
+            sym_set.solve_order(given_symbols)
+            return
+
+    print("Error: A solution could not be found for your symbol set")
+
+if __name__ == "__main__":
+    solve_symbols(None)
