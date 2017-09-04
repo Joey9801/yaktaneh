@@ -1,5 +1,3 @@
-#!venv/bin/python3
-
 import math
 import os.path
 
@@ -8,7 +6,7 @@ import numpy as np
 
 from interface import ask_question, give_instructions
 
-def map_float_to_greyscale(value):
+def float_to_ascii(value):
     chars = list("W&%=^~:-. ")
     value = int(value * (len(chars) - 0))
     if value == len(chars):
@@ -90,10 +88,7 @@ class Symbol():
 
         for row in self.img:
             print(" " * padding, end="")
-            for pixel in row:
-                print("{}".format(map_float_to_greyscale(pixel)), end="")
-
-            print()
+            print("".join(map(float_to_ascii, row)))
 
         print()
         print("{:{padding}}{name:^{width}}".format("", padding=padding,
@@ -282,6 +277,3 @@ def solve_symbols(bomb):
             return
 
     print("Error: A solution could not be found for your symbol set")
-
-if __name__ == "__main__":
-    solve_symbols(None)
