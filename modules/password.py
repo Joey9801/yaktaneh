@@ -19,6 +19,7 @@ class Password():
     def ask_letter(self, pos):
         characters = ask_question(
                 "What letters can go in position {}?".format(pos + 1), str)
+        characters = characters.lower()
 
         password_shortlist = set([p for p in passwords if p[pos] in characters])
 
@@ -26,7 +27,7 @@ class Password():
             print("Error: there are no passwords which match the given " + 
                   "character set...")
 
-            return
+            return False
 
         password_shortlist = password_shortlist.intersection(self.possibilities)
 
@@ -35,30 +36,44 @@ class Password():
                   " of the given character set + the previously given " +
                   " character sets..")
 
-            return
+            return False
 
         self.possibilities = password_shortlist
+        return True
 
+    def possibilities_str(self):
+        if len(self.possibilities) == 0:
+            return "There are no solutions"
+        elif len(self.possibilities) == 1:
+            only_remaining = next(iter(self.possibilities))
+            return "The password is \"{}\"".format(only_remaining)
+        else:
+            options_string = ", ".join(map(lambda x: "\"{}\"".format(x),
+                self.possibilities))
+            return "The password is one of ({})".format(options_string)
 
 def solve_password(bomb):
     p = Password()
 
-
     print("There are {} possible passwords.".format(len(p.possibilities)))
+    print()
+    print("When entering characters:")
+    print("   - Repeats are fine")
+    print("   - Upper/lowercase doesn't matter")
+    print()
+    print("Press <ctrl>+c at any point to give up")
 
     for i in range(5):
-        p.ask_letter(i)
-        print("There are now {} possible passwords.".format(len(p.possibilities)))
+        while not p.ask_letter(i):
+            pass
+
+        print("{} possible solution(s) remain".format(len(p.possibilities)))
 
         if len(p.possibilities) <= 2:
             break
 
+    print()
+    give_instruction(p.possibilities_str())
+    print()
 
-    if len(p.possibilities) == 1:
-        give_instruction("The password is {}".format(
-            ", ".join(p.possibilities)))
-
-    elif len(p.possibilities) > 1:
-        give_instruction("The password is one of ({})".format(
-            ", ".join(p.possibilities)))
-
+    input("Press enter to continue..")
