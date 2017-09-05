@@ -29,7 +29,7 @@ I'm glad you asked - not all of them (yet). Feel free to open a pull request whi
 | Complicated Wires | :heavy_check_mark:* |
 | Wire Sequences    |                     |
 | Mazes             |                     |
-| Passwords         |                     |
+| Passwords         | :heavy_check_mark:  |
 | Knobs             |                     |
 
 _* : Works, but I'm unhappy with the interface_
